@@ -1,7 +1,4 @@
 Adding a file to the git
 test
-<<<<<<< HEAD
 trololol
-=======
 adding something else idk
->>>>>>> feafb342ef45455ba4c0ef5ef467c70fb89669b6
