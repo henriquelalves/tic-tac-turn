@@ -11,8 +11,8 @@ var cubes = {}
 var turn
 
 func cube_clicked(cube):
-	cubes[cube].change_type(turn)
-	turn = (turn%2)+1
+	cubes[cube].change_type(turn) #Set the cube
+	turn = (turn%2)+1 #Change the turn
 	pass
 
 func _ready():

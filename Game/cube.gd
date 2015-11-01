@@ -5,11 +5,6 @@ extends RigidBody
 var reference
 var type
 
-# Constants to make material changing easier
-const MATERIAL_NEUTRAL = 0
-const MATERIAL_PLAYER1 = 1
-const MATERIAL_PLAYER2 = 2
-
 # function called by parent node, to set this cube reference
 func set_reference(ref):
 	reference = ref
@@ -18,27 +13,25 @@ func set_reference(ref):
 # function to change the cube "type"
 func change_type(newtype):
 	if (newtype == 0):
-		_change_material(MATERIAL_NEUTRAL)
+		_change_material(get_node("/root/global").MATERIAL_NEUTRAL)
 	elif (newtype == 1):
-		_change_material(MATERIAL_PLAYER1)
+		_change_material(get_node("/root/global").MATERIAL_PLAYER1)
 	else:
-		_change_material(MATERIAL_PLAYER2)
+		_change_material(get_node("/root/global").MATERIAL_PLAYER2)
 	
 	self.type = newtype
 	pass
 
 func _change_material(newmaterial):
-	# Actuallly, this next code is a very bad practice (so its only temporary!);
-	# the correct thing to do would be to load all the materials on a global
-	# dictionary, and just reference it with the variable "material", so to
-	# not load the materials every time this function is called
+	# By getting the "global" node we created, it is possible to reference
+	# the materials that were loaded on the "materials" dictionary!
 	var material
-	if (newmaterial == MATERIAL_NEUTRAL):
-		material = load("res://Assets/neutral_fixedmaterial.mtl")
-	elif (newmaterial == MATERIAL_PLAYER1):
-		material = load("res://Assets/player1_fixedmaterial.mtl")
+	if (newmaterial == get_node("/root/global").MATERIAL_NEUTRAL):
+		material = get_node("/root/global").materials["neutral"]
+	elif (newmaterial == get_node("/root/global").MATERIAL_PLAYER1):
+		material = get_node("/root/global").materials["player1"]
 	else:
-		material = load("res://Assets/player2_fixedmaterial.mtl")
+		material = get_node("/root/global").materials["player2"]
 	
 	# Override current mesh material
 	get_node("Mesh").set_material_override(material)
