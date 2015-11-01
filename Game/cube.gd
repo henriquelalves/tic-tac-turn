@@ -46,9 +46,6 @@ func _input_event(camera,event,pos,normal,shape):
 func _ready():
 	# Initialization here
 	
-	# Cube initial type is always neutral
-	change_type(0)
-	
 	# Signals are used so when the mouse click on one of the cubes, the function
 	# on the parent scene is called
 	add_user_signal("mouse_clicked")

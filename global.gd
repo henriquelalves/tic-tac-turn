@@ -8,6 +8,14 @@ const MATERIAL_NEUTRAL = 0
 const MATERIAL_PLAYER1 = 1
 const MATERIAL_PLAYER2 = 2
 
+const ROTATION_X_AXIS = 0
+const ROTATION_Y_AXIS = 1
+const ROTATION_Z_ACIS = 2
+
+const ROTATION_CLOCKWISE = 0
+const ROTATION_COUNTERCLOCKWISE = 1
+
+
 # declaring variables
 var materials = {}
 
