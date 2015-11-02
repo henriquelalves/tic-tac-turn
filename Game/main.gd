@@ -25,7 +25,7 @@ func cube_clicked(cube):
 func rotate_cubes(axis, wise):
 	# Reparent cubes to JointPoint
 	for cube in temp_cubes:
-		remove_child(cube)
+		cube.get_parent().remove_child(cube)
 		get_node("JointPoint").add_child(cube)
 	
 	# Change dictionary cubes references
@@ -39,24 +39,9 @@ func rotate_cubes(axis, wise):
 
 																			
 # PRIVATE FUNCTIONS
-func _fixed_process(delta):
-	
-	# Check if it finished rotating
-	if(isRotating):
-		if not get_node("AnimationPlayer").is_playing():
-			# Reparent nodes of JointPoint to itself
-			for cube in temp_cubes:
-				get_node("JointPoint").remove_child(cube)
-				add_child(cube)
-			isRotating = false
-			rotate_cubes(0,0)
-	
-	pass
 
 func _ready():
 	# Initialization here
-	
-	self.set_fixed_process(true)
 	
 	# This is for the cube creation via script; you need to reference the
 	# resource that you are going to use
@@ -91,3 +76,15 @@ func _ready():
 	rotate_cubes(0,0)
 	
 	pass
+
+func _on_AnimationPlayer_finished():
+	# Reparent nodes of JointPoint to itself
+	
+	for cube in temp_cubes:
+		
+		cube.set_transform(cube.get_global_transform())
+		cube.get_parent().remove_child(cube)
+		add_child(cube)
+		
+	isRotating = false
+	rotate_cubes(0,0)
