@@ -33,6 +33,7 @@ func rotate_cubes(axis, wise):
 	
 	# Play JointPoint animation and change isRotating
 	isRotating = true
+	
 	get_node("AnimationPlayer").play("x_clockwise")
 	
 	pass
@@ -62,21 +63,14 @@ func _ready():
 	# Begins on turn 1 (player 1)
 	turn = 1
 	
-	temp_cubes.append(cubes[Vector3(2,0,0)])
-	temp_cubes.append(cubes[Vector3(2,0,1)])
-	temp_cubes.append(cubes[Vector3(2,0,2)])
-	temp_cubes.append(cubes[Vector3(2,1,0)])
-	temp_cubes.append(cubes[Vector3(2,1,1)])
-	temp_cubes.append(cubes[Vector3(2,1,2)])
-	temp_cubes.append(cubes[Vector3(2,2,0)])
-	temp_cubes.append(cubes[Vector3(2,2,1)])
-	temp_cubes.append(cubes[Vector3(2,2,2)])
-	
+	for vector in (global.VECTORS_RIGHT_SIDE):
+		temp_cubes.append(cubes[vector])
 	
 	rotate_cubes(0,0)
 	
 	pass
 
+# AnimationPlayer signal when an animation has finished
 func _on_AnimationPlayer_finished():
 	# Reparent nodes of JointPoint to itself
 	
