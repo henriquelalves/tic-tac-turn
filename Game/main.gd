@@ -29,7 +29,29 @@ func rotate_cubes(axis, wise):
 		get_node("JointPoint").add_child(cube)
 	
 	# Change dictionary cubes references
+	var temp1cube
+	var temp2cube
+	var temp3cube
+	var temp4cube
 	
+	
+	# The for-loop that updates the dictionary
+	var j = 2
+	for i in range(0,2):
+		temp1cube = cubes[Vector3(2,j-i,2)]
+		temp2cube = cubes[Vector3(2,0,j-i)]
+		temp3cube = cubes[Vector3(2,i,0)]
+		temp4cube = cubes[Vector3(2,2,i)]
+	
+		temp1cube.set_reference(Vector3(2,0,j-i))
+		temp2cube.set_reference(Vector3(2,i,0))
+		temp3cube.set_reference(Vector3(2,2,i))
+		temp4cube.set_reference(Vector3(2,i,2))
+	
+		cubes[Vector3(2,j-i,2)] = temp4cube
+		cubes[Vector3(2,0,j-i)] = temp1cube
+		cubes[Vector3(2,i,0)] = temp2cube
+		cubes[Vector3(2,2,i)] = temp3cube
 	
 	# Play JointPoint animation and change isRotating
 	isRotating = true
@@ -43,7 +65,7 @@ func rotate_cubes(axis, wise):
 
 func _ready():
 	# Initialization here
-	
+	self.set_fixed_process(true)
 	# This is for the cube creation via script; you need to reference the
 	# resource that you are going to use
 	var Cube = load("Game/cube.scn")
@@ -63,13 +85,19 @@ func _ready():
 	# Begins on turn 1 (player 1)
 	turn = 1
 	
-	for vector in (global.VECTORS_RIGHT_SIDE):
+	for vector in (global.VECTORS_LEFT_SIDE):
 		temp_cubes.append(cubes[vector])
-	
-	rotate_cubes(0,0)
+	cubes[Vector3(2,2,2)].change_type(2)
+	#rotate_cubes(0,0)
 	
 	pass
-
+	
+func _fixed_process(delta):
+	if (Input.is_action_pressed("move_down")):
+		isRotating = false
+		rotate_cubes(0,0)
+	pass
+	
 # AnimationPlayer signal when an animation has finished
 func _on_AnimationPlayer_finished():
 	# Reparent nodes of JointPoint to itself
@@ -81,4 +109,4 @@ func _on_AnimationPlayer_finished():
 		add_child(cube)
 		
 	isRotating = false
-	rotate_cubes(0,0)
+	#rotate_cubes(0,0)
