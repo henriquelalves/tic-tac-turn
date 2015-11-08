@@ -88,7 +88,7 @@ func _ready():
 	for vector in (global.VECTORS_LEFT_SIDE):
 		temp_cubes.append(cubes[vector])
 	cubes[Vector3(2,2,2)].change_type(2)
-	#rotate_cubes(0,0)
+	rotate_cubes(0,0)
 	
 	pass
 	
@@ -109,4 +109,5 @@ func _on_AnimationPlayer_finished():
 		add_child(cube)
 		
 	isRotating = false
-	#rotate_cubes(0,0)
+	get_node("JointPoint").set_rotation(Vector3(0,0,0))
+	rotate_cubes(0,0)
