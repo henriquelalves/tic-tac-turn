@@ -16,12 +16,12 @@ const ROTATION_CLOCKWISE = 0
 const ROTATION_COUNTERCLOCKWISE = 1
 
 const VECTORS_LEFT_SIDE = [		Vector3(2,0,0),Vector3(2,0,1),Vector3(2,0,2),
-								Vector3(2,1,0),Vector3(2,1,0),Vector3(2,1,2),
+								Vector3(2,1,0),Vector3(2,1,1),Vector3(2,1,2),
 								Vector3(2,2,0),Vector3(2,2,1),Vector3(2,2,2)]
 const VECTORS_RIGHT_SIDE = [	Vector3(0,0,0),Vector3(0,0,1),Vector3(0,0,2),
-								Vector3(0,1,0),Vector3(0,1,0),Vector3(0,1,2),
+								Vector3(0,1,0),Vector3(0,1,1),Vector3(0,1,2),
 								Vector3(0,2,0),Vector3(0,2,1),Vector3(0,2,2)]
-const VECTORS_UP_SIDE = [		Vector3(0,2,0),Vector3(0,2,0),Vector3(0,2,2),
+const VECTORS_UP_SIDE = [		Vector3(0,2,0),Vector3(0,2,1),Vector3(0,2,2),
 								Vector3(1,2,0),Vector3(1,2,1),Vector3(1,2,2),
 								Vector3(2,2,0),Vector3(2,2,1),Vector3(2,2,2)]
 const VECTORS_DOWN_SIDE = [		Vector3(0,0,0),Vector3(0,0,1),Vector3(0,0,2),
@@ -33,6 +33,18 @@ const VECTORS_FRONT_SIDE = [	Vector3(0,0,0),Vector3(0,1,0),Vector3(0,2,0),
 const VECTORS_BACK_SIDE = [		Vector3(0,0,2),Vector3(0,1,2),Vector3(0,2,2),
 								Vector3(1,0,2),Vector3(1,1,2),Vector3(1,2,2),
 								Vector3(2,0,2),Vector3(2,1,2),Vector3(2,2,2)]
+const VECTORS_ALL = [			Vector3(2,0,0),Vector3(2,0,1),Vector3(2,0,2),
+								Vector3(2,1,0),Vector3(2,1,1),Vector3(2,1,2),
+								Vector3(2,2,0),Vector3(2,2,1),Vector3(2,2,2),
+								Vector3(1,0,0),Vector3(1,0,1),Vector3(1,0,2),
+								Vector3(1,1,0),               Vector3(1,1,2),
+								Vector3(1,2,0),Vector3(1,2,1),Vector3(1,2,2),
+								Vector3(0,0,0),Vector3(0,0,1),Vector3(0,0,2),
+								Vector3(0,1,0),Vector3(0,1,1),Vector3(0,1,2),
+								Vector3(0,2,0),Vector3(0,2,1),Vector3(0,2,2)]
+
+const CHANGING_MIDDLE_CUBE_ORDER = [0,1,2,1]
+const CHANGING_CORNER_CUBE_ORDER = [0,2,2,0]
 
 # declaring variables
 var materials = {}
