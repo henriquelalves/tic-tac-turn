@@ -39,20 +39,12 @@ func _change_material(newmaterial):
 
 func _input_event(camera,event,pos,normal,shape):
 	if (event.type==InputEvent.MOUSE_BUTTON and event.pressed):
-		# emit signal to notify parent!
-		emit_signal("mouse_clicked", reference)
+		# call parent function!
+		get_parent().cube_clicked(reference)
 
 
 func _ready():
 	# Initialization here
-	
-	# Cube initial type is always neutral
-	change_type(0)
-	
-	# Signals are used so when the mouse click on one of the cubes, the function
-	# on the parent scene is called
-	add_user_signal("mouse_clicked")
-	connect("mouse_clicked", get_parent(), "cube_clicked")
 	
 	pass
 
