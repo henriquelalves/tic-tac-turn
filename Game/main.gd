@@ -25,10 +25,11 @@ func _ready():
 	# Setting up the cubes on the dictionary!
 	for i in range(0, 3):
 		for j in range(0, 3):
-			cubes[Vector2(i, j)] = Cube.instance() # Creating the cube here!
-			add_child(cubes[Vector2(i, j)]) # Adding the cube as a child of the game scene!
-			cubes[Vector2(i,j)].set_reference(Vector2(i,j)) # Set the reference for the cube!
-			cubes[Vector2(i, j)].set_translation(Vector3((i-1)*3, (j-1)*3, 0)) # Moving the cube!
+			for m in range(0, 3):
+				cubes[Vector3(i, j, m)] = Cube.instance() # Creating the cube here!
+				add_child(cubes[Vector3(i, j, m)]) # Adding the cube as a child of the game scene!
+				cubes[Vector3(i, j, m)].set_reference(Vector3(i, j, m)) # Set the reference for the cube!
+				cubes[Vector3(i, j, m)].set_translation(Vector3((i-1)*3, (j-1)*3, (m-1)*3)) # Moving the cube!
 	
 	# Begins on turn 1 (player 1)
 	turn = 1
