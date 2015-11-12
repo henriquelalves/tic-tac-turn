@@ -8,12 +8,12 @@ const MATERIAL_NEUTRAL = 0
 const MATERIAL_PLAYER1 = 1
 const MATERIAL_PLAYER2 = 2
 
-const ROTATION_X_AXIS = 0
-const ROTATION_Y_AXIS = 1
-const ROTATION_Z_AXIS = 2
+const ROTATION_X_AXIS = Vector3(1,0,0)
+const ROTATION_Y_AXIS = Vector3(0,1,0)
+const ROTATION_Z_AXIS = Vector3(0,0,1)
 
-const ROTATION_CLOCKWISE = 0
-const ROTATION_COUNTERCLOCKWISE = 1
+const ROTATION_CLOCKWISE = 1
+const ROTATION_COUNTERCLOCKWISE = -1
 
 const VECTORS_LEFT_SIDE = [		Vector3(2,0,0),Vector3(2,0,1),Vector3(2,0,2),
 								Vector3(2,1,0),Vector3(2,1,1),Vector3(2,1,2),

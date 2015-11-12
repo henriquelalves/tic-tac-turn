@@ -28,50 +28,47 @@ func rotate_cubes(axis, wise):
 		temp_cubes[cube_vector].get_parent().remove_child(temp_cubes[cube_vector])
 		get_node("JointPoint").add_child(temp_cubes[cube_vector])
 	
-	# Change dictionary cubes references
-#	var temp1cube
-#	var temp2cube
-#	var temp3cube
-#	var temp4cube
-#	
+	# Correct cubes positions on dictionary arithmetically
+	# Rotation matrix:
+	var rot = Matrix3() # Identity Matrix
+	rot.rotated(axis,90*wise) # Rotate it by the "axis", in a 90 degree (clockwise or counterclockwise)
 	
-	# The for-loop that updates the dictionary
-#	var j = 2
-#	for i in range(0,2):
-#		temp1cube = cubes[Vector3(2,j-i,2)]
-#		temp2cube = cubes[Vector3(2,0,j-i)]
-#		temp3cube = cubes[Vector3(2,i,0)]
-#		temp4cube = cubes[Vector3(2,2,i)]
-#	
-#		temp1cube.set_reference(Vector3(2,0,j-i))
-#		temp2cube.set_reference(Vector3(2,i,0))
-#		temp3cube.set_reference(Vector3(2,2,i))
-#		temp4cube.set_reference(Vector3(2,i,2))
-#	
-#		cubes[Vector3(2,j-i,2)] = temp4cube
-#		cubes[Vector3(2,0,j-i)] = temp1cube
-#		cubes[Vector3(2,i,0)] = temp2cube
-#		cubes[Vector3(2,2,i)] = temp3cube
-	# Changing corner cubes
-	
-	
-	for c in range (0,3):
-		if(temp_cubes.has(Vector3(c,0,0))):
-			for i in range (0,4):
-				var pos = Vector3(c,global.CHANGING_CORNER_CUBE_ORDER[i], global.CHANGING_CORNER_CUBE_ORDER[(i+1)%4])
-				var next_pos = Vector3(c,global.CHANGING_CORNER_CUBE_ORDER[(i+1)%4], global.CHANGING_CORNER_CUBE_ORDER[(i+2)%4])
-				temp_cubes[pos].reference = next_pos
-				cubes[next_pos] = temp_cubes[pos]
-				
-				pos = Vector3(c,global.CHANGING_MIDDLE_CUBE_ORDER[i], global.CHANGING_MIDDLE_CUBE_ORDER[(i+1)%4])
-				next_pos = Vector3(c,global.CHANGING_MIDDLE_CUBE_ORDER[(i+1)%4], global.CHANGING_MIDDLE_CUBE_ORDER[(i+2)%4])
-				temp_cubes[pos].reference = next_pos
-				cubes[next_pos] = temp_cubes[pos]
+	for cube_vector in temp_cubes:
+		var newpos
+		# Small translate correction
+		newpos = cube_vector + Vector3(0.5, 0.5, 0.5)
+		# Translate to origin
+		newpos = newpos - Vector3(1.5, 1.5, 1.5)
+		# Rotate
+		newpos = rot * newpos
+		# Retranslate from origin
+		newpos = newpos + Vector3(1.5, 1.5, 1.5)
+		# Translate recorrection
+		newpos = newpos - Vector3(0.5, 0.5, 0.5)
+		
+		# Correction on dictionary
+		temp_cubes[cube_vector].reference = newpos
+		cubes[newpos] = temp_cubes[cube_vector]
 	
 	# Play JointPoint animation and change isRotating
 	isRotating = true
 	
-	get_node("AnimationPlayer").play("x_clockwise")
+	# Play correct animation
+	if(axis == global.ROTATION_X_AXIS):
+		if(wise == global.ROTATION_CLOCKWISE):
+			get_node("AnimationPlayer").play("x_clockwise")
+		elif(wise == global.ROTATION_COUNTERCLOCKWISE):
+			get_node("AnimationPlayer").play("x_counterclockwise")
+	elif(axis == global.ROTATION_Y_AXIS):
+		if(wise == global.ROTATION_CLOCKWISE):
+			get_node("AnimationPlayer").play("y_clockwise")
+		elif(wise == global.ROTATION_COUNTERCLOCKWISE):
+			get_node("AnimationPlayer").play("y_counterclockwise")
+	elif(axis == global.ROTATION_Z_AXIS):
+		if(wise == global.ROTATION_CLOCKWISE):
+			get_node("AnimationPlayer").play("z_clockwise")
+		elif(wise == global.ROTATION_COUNTERCLOCKWISE):
+			get_node("AnimationPlayer").play("z_counterclockwise")
 	
 	pass
 
@@ -92,10 +89,11 @@ func _ready():
 	for i in range(0, 3):
 		for j in range(0, 3):
 			for k in range(0, 3):
-				cubes[Vector3(i, j, k)] = Cube.instance() # Creating the cube here!
-				add_child(cubes[Vector3(i, j, k)]) # Adding the cube as a child of the game scene!
-				cubes[Vector3(i,j,k)].set_reference(Vector3(i,j,k)) # Set the reference for the cube!
-				cubes[Vector3(i,j,k)].set_translation(Vector3((i-1)*3, (j-1)*3, (k-1)*3)) # Moving the cube!
+				if(i != 1 or j != 1 or k != 1):
+					cubes[Vector3(i, j, k)] = Cube.instance() # Creating the cube here!
+					add_child(cubes[Vector3(i, j, k)]) # Adding the cube as a child of the game scene!
+					cubes[Vector3(i,j,k)].set_reference(Vector3(i,j,k)) # Set the reference for the cube!
+					cubes[Vector3(i,j,k)].set_translation(Vector3((i-1)*3, (j-1)*3, (k-1)*3)) # Moving the cube!
 	
 	# Begins on turn 1 (player 1)
 	turn = 1
@@ -103,8 +101,8 @@ func _ready():
 	for vector in (global.VECTORS_ALL):
 		temp_cubes[vector] = cubes[vector]
 	cubes[Vector3(2,2,2)].change_type(2)
-	print(temp_cubes)
-	rotate_cubes(0,0)
+	
+	rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
 	
 	pass
 	
@@ -125,5 +123,10 @@ func _on_AnimationPlayer_finished():
 		add_child(temp_cubes[cube_vector])
 		
 	isRotating = false
+	
+	temp_cubes.clear()
+	for vector in (global.VECTORS_ALL):
+		temp_cubes[vector] = cubes[vector]
 	get_node("JointPoint").set_rotation(Vector3(0,0,0))
-	rotate_cubes(0,0)
+	
+	rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_COUNTERCLOCKWISE)
