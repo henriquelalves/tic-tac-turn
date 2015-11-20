@@ -17,12 +17,16 @@ var turn
 																			
 # "PUBLIC" FUNCTIONS!
 func cube_clicked(cube):
-	cubes[cube].change_type(turn) #Set the cube
-	turn = (turn%2)+1 #Change the turn
+	if(not isRotating):
+		cubes[cube].change_type(turn) #Set the cube
+		turn = (turn%2)+1 #Change the turn
 	pass
 
 # The function to rotate cubes!
 func rotate_cubes(axis, wise):
+		# Play JointPoint animation and change isRotating
+	isRotating = true
+	
 	# Reparent cubes to JointPoint
 	for cube_vector in temp_cubes:
 		temp_cubes[cube_vector].get_parent().remove_child(temp_cubes[cube_vector])
@@ -49,9 +53,6 @@ func rotate_cubes(axis, wise):
 		# Correction on dictionary
 		temp_cubes[cube_vector].reference = newpos
 		cubes[newpos] = temp_cubes[cube_vector]
-	
-	# Play JointPoint animation and change isRotating
-	isRotating = true
 	
 	# Play correct animation
 	if(axis == global.ROTATION_X_AXIS):
@@ -93,25 +94,45 @@ func _ready():
 					cubes[Vector3(i, j, k)] = Cube.instance() # Creating the cube here!
 					add_child(cubes[Vector3(i, j, k)]) # Adding the cube as a child of the game scene!
 					cubes[Vector3(i,j,k)].set_reference(Vector3(i,j,k)) # Set the reference for the cube!
-					cubes[Vector3(i,j,k)].set_translation(Vector3((i-1)*3, (j-1)*3, (k-1)*3)) # Moving the cube!
+					cubes[Vector3(i,j,k)].set_translation(Vector3((i-1)*2.01, (j-1)*2.01, (k-1)*2.01)) # Moving the cube!
 	
 	# Begins on turn 1 (player 1)
 	turn = 1
 	
-	for vector in (global.VECTORS_ALL):
-		temp_cubes[vector] = cubes[vector]
-	cubes[Vector3(2,2,2)].change_type(2)
+	
 	
 	rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
 	
 	pass
-	
+
+# Keyboard input
 func _fixed_process(delta):
-	if (Input.is_action_pressed("move_down")):
-		isRotating = false
-		rotate_cubes(0,0)
+	if (Input.is_action_pressed("ui_down")):
+		if(not isRotating):
+			turn = (turn%2)+1 #Change the turn
+			for vector in (global.VECTORS_ALL):
+				temp_cubes[vector] = cubes[vector]
+			rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_CLOCKWISE)
+	if (Input.is_action_pressed("ui_up")):
+		if(not isRotating):
+			turn = (turn%2)+1 #Change the turn
+			for vector in (global.VECTORS_ALL):
+				temp_cubes[vector] = cubes[vector]
+			rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
+	if (Input.is_action_pressed("ui_left")):
+		if(not isRotating):
+			turn = (turn%2)+1 #Change the turn
+			for vector in (global.VECTORS_ALL):
+				temp_cubes[vector] = cubes[vector]
+			rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_CLOCKWISE)
+	if (Input.is_action_pressed("ui_right")):
+		if(not isRotating):
+			turn = (turn%2)+1 #Change the turn
+			for vector in (global.VECTORS_ALL):
+				temp_cubes[vector] = cubes[vector]
+			rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_COUNTERCLOCKWISE)
 	pass
-	
+
 # AnimationPlayer signal when an animation has finished
 func _on_AnimationPlayer_finished():
 	# Reparent nodes of JointPoint to itself
@@ -125,8 +146,4 @@ func _on_AnimationPlayer_finished():
 	isRotating = false
 	
 	temp_cubes.clear()
-	for vector in (global.VECTORS_ALL):
-		temp_cubes[vector] = cubes[vector]
 	get_node("JointPoint").set_rotation(Vector3(0,0,0))
-	
-	rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_COUNTERCLOCKWISE)
