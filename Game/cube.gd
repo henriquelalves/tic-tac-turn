@@ -4,11 +4,16 @@ extends RigidBody
 # reference is used so the cube can know its place on the vector
 var reference
 var type = 0
+var flashing = false
+var colorsin = 0
 
 # function called by parent node, to set this cube reference
 func set_reference(ref):
 	reference = ref
 	pass
+
+func set_flashing(b):
+	flashing = b
 
 # function to change the cube "type"
 func change_type(newtype):
@@ -45,7 +50,15 @@ func _input_event(camera,event,pos,normal,shape):
 
 func _ready():
 	# Initialization here
-	
+	set_fixed_process(true)
 	pass
 
-
+# Just a pretty flashing effect when a player wins
+func _fixed_process(delta):
+	if(flashing):
+		var material = get_node("Mesh").get_material_override()
+		var c = 15 + sin(colorsin)*10
+		material.set_parameter(3, Color(c,c,c))
+		colorsin += 0.1
+		get_node("Mesh").get_mesh().surface_set_material(0, material)
+	pass
