@@ -13,12 +13,18 @@ var temp_cubes = {}
 
 # Current turn
 var turn
+var won = 0
 
 																			
 # "PUBLIC" FUNCTIONS!
 func cube_clicked(cube):
-	if(not isRotating):
+	if(not isRotating and won == 0):
 		cubes[cube].change_type(turn) #Set the cube
+		_checkWinningCondition(turn) #Check winning condition
+		if(won == 1):
+			get_node("Stage").get_node("Win1").show()
+		elif(won == 2):
+			get_node("Stage").get_node("Win2").show()
 		turn = (turn%2)+1 #Change the turn
 	pass
 
@@ -147,3 +153,96 @@ func _on_AnimationPlayer_finished():
 	
 	temp_cubes.clear()
 	get_node("JointPoint").set_rotation(Vector3(0,0,0))
+
+func _checkWinningCondition(player):
+	var tempCond = []
+	
+	# Front Size
+	for vector in (global.VECTORS_FRONT_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	
+	# Back side
+	tempCond.clear()
+	for vector in (global.VECTORS_BACK_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	# Left side
+	tempCond.clear()
+	for vector in (global.VECTORS_LEFT_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	# Right side
+	tempCond.clear()
+	for vector in (global.VECTORS_RIGHT_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	
+	# Upper side
+	tempCond.clear()
+	for vector in (global.VECTORS_UP_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	
+	# Down side
+	tempCond.clear()
+	for vector in (global.VECTORS_DOWN_SIDE):
+		tempCond.append(vector)
+	for i in range(0, 3):
+		if(cubes[tempCond[i]].type == player and cubes[tempCond[i+3]].type == player and cubes[tempCond[i+6]].type == player):
+			won = player
+	for i in range(0, 3):
+		if(cubes[tempCond[i*3]].type == player and cubes[tempCond[i*3 + 1]].type == player and cubes[tempCond[i*3 + 2]].type == player):
+			won = player
+	if(cubes[tempCond[0]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[8]].type == player):
+		won = player
+	if(cubes[tempCond[2]].type == player and cubes[tempCond[4]].type == player and cubes[tempCond[6]].type == player):
+		won = player
+	
+	
+	pass

@@ -48,6 +48,7 @@ const CHANGING_CORNER_CUBE_ORDER = [0,2,2,0]
 
 # declaring variables
 var materials = {}
+var current_scene = null
 
 func _ready():
 	# Loading all materials on a dictionary
@@ -55,5 +56,18 @@ func _ready():
 	materials["player1"] = load("Assets/player1_fixedmaterial.mtl")
 	materials["player2"] = load("Assets/player2_fixedmaterial.mtl")
 	
+	var root = get_tree().get_root()
+	current_scene = root.get_child(root.get_child_count() - 1)
 	
 	pass
+
+
+func goto_scene(path):
+	call_deferred("_deferred_goto_scene",path)
+	
+func _deferred_goto_scene(path):
+	current_scene.free()
+	var s = ResourceLoader.load(path)
+	current_scene = s.instance()
+	get_tree().get_root().add_child(current_scene)
+	get_tree().set_current_scene(current_scene)
