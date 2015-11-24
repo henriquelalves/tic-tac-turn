@@ -3,7 +3,7 @@ extends RigidBody
 
 # reference is used so the cube can know its place on the vector
 var reference
-var type
+var type = 0
 
 # function called by parent node, to set this cube reference
 func set_reference(ref):

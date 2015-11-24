@@ -18,7 +18,7 @@ var won = 0
 																			
 # "PUBLIC" FUNCTIONS!
 func cube_clicked(cube):
-	if(not isRotating and won == 0):
+	if(not isRotating and won == 0 and cubes[cube].type == 0):
 		cubes[cube].change_type(turn) #Set the cube
 		_checkWinningCondition(turn) #Check winning condition
 		if(won == 1):
