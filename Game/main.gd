@@ -27,15 +27,26 @@ func cube_clicked(cube):
 			elif(won == 2):
 				get_node("Stage").get_node("Win2").show()
 			
+			get_node("Stage/Description").hide()
+			get_node("Stage/Turn1").hide()
+			get_node("Stage/Turn2").hide()
+			
 			for cube in winningCubes:
 				print(winningCubes.size())
 				cube.set_flashing(true)
-		turn = (turn%2)+1 #Change the turn
+		else:
+			change_turn()
 	pass
 
 # The function to rotate cubes!
 func rotate_cubes(axis, wise):
-		# Play JointPoint animation and change isRotating
+	# Hide arrows
+	get_node("Stage/Arrow_down").hide() 
+	get_node("Stage/Arrow_right").hide()
+	get_node("Stage/Arrow_left").hide()
+	get_node("Stage/Arrow_up").hide()
+	
+	# Play JointPoint animation and change isRotating
 	isRotating = true
 	
 	# Reparent cubes to JointPoint
@@ -84,6 +95,31 @@ func rotate_cubes(axis, wise):
 	
 	pass
 
+# When an arrows is clicked
+func arrow_clicked(arrow):
+	for vector in (global.VECTORS_ALL):
+		temp_cubes[vector] = cubes[vector]
+	if(arrow == get_node("Stage/Arrow_down")):
+		rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_CLOCKWISE)
+	elif(arrow == get_node("Stage/Arrow_left")):
+		rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_CLOCKWISE)
+	elif(arrow == get_node("Stage/Arrow_right")):
+		rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_COUNTERCLOCKWISE)
+	elif(arrow == get_node("Stage/Arrow_up")):
+		rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
+
+func change_turn():
+	turn = (turn%2)+1 # alternates between player 1 and player 2
+	
+	# Change text label
+	if(turn == 1):
+		get_node("Stage/Turn2").hide()
+		get_node("Stage/Turn1").show()
+	elif(turn == 2):
+		get_node("Stage/Turn1").hide()
+		get_node("Stage/Turn2").show()
+	
+
 																			
 # PRIVATE FUNCTIONS
 
@@ -110,35 +146,27 @@ func _ready():
 	# Begins on turn 1 (player 1)
 	turn = 1
 	
-	
-	
-	rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
-	
 	pass
 
 # Keyboard input
 func _fixed_process(delta):
 	if (Input.is_action_pressed("ui_down")):
 		if(not isRotating):
-			turn = (turn%2)+1 #Change the turn
 			for vector in (global.VECTORS_ALL):
 				temp_cubes[vector] = cubes[vector]
 			rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_CLOCKWISE)
 	if (Input.is_action_pressed("ui_up")):
 		if(not isRotating):
-			turn = (turn%2)+1 #Change the turn
 			for vector in (global.VECTORS_ALL):
 				temp_cubes[vector] = cubes[vector]
 			rotate_cubes(global.ROTATION_X_AXIS,global.ROTATION_COUNTERCLOCKWISE)
 	if (Input.is_action_pressed("ui_left")):
 		if(not isRotating):
-			turn = (turn%2)+1 #Change the turn
 			for vector in (global.VECTORS_ALL):
 				temp_cubes[vector] = cubes[vector]
 			rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_CLOCKWISE)
 	if (Input.is_action_pressed("ui_right")):
 		if(not isRotating):
-			turn = (turn%2)+1 #Change the turn
 			for vector in (global.VECTORS_ALL):
 				temp_cubes[vector] = cubes[vector]
 			rotate_cubes(global.ROTATION_Y_AXIS,global.ROTATION_COUNTERCLOCKWISE)
@@ -156,6 +184,17 @@ func _on_AnimationPlayer_finished():
 		
 	isRotating = false
 	
+	# Show arrows again
+	get_node("Stage/Arrow_down").show()
+	get_node("Stage/Arrow_right").show()
+	get_node("Stage/Arrow_left").show()
+	get_node("Stage/Arrow_up").show()
+	
+	# When animation ends, change turn
+	if(won == 0):
+		change_turn()
+	
+	# Reset selected cubes and JointPoint
 	temp_cubes.clear()
 	get_node("JointPoint").set_rotation(Vector3(0,0,0))
 
